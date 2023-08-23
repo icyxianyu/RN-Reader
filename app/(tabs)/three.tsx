@@ -1,20 +1,14 @@
 import { StyleSheet } from 'react-native';
-import { useState } from "react"
+
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-import { Tab } from '@rneui/base';
 
-export default function TabOneScreen() {
-  const [index, setIndex] = useState(0);
+export default function TabThreeScreen() {
   return (
     <View style={styles.container}>
-      <Tab value={index} onChange={setIndex} dense>
-        <Tab.Item>Tab</Tab.Item>
-        <Tab.Item>Tab</Tab.Item>
-      </Tab>
-      <Text style={styles.title}>Tab One</Text>
+      <Text style={styles.title}>Tab Three</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <EditScreenInfo path="app/(tabs)/three.tsx" />
     </View>
   );
 }

@@ -5,12 +5,14 @@ import Colors from '../constants/Colors';
 import { ExternalLink } from './ExternalLink';
 import { MonoText } from './StyledText';
 import { Text, View } from './Themed';
-
-
+import { Button } from "@rneui/base";
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
     <View>
       <View style={styles.getStartedContainer}>
+        <Button
+          title="test"
+        />
         <Text
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
