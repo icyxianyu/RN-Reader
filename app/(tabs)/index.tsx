@@ -1,37 +1,84 @@
-import { StyleSheet } from 'react-native';
-import { useState } from "react"
-import EditScreenInfo from '../../components/EditScreenInfo';
+import { StyleSheet, FlatList, ScrollView } from 'react-native';
+import { useCallback, useState } from "react"
 import { Text, View } from '../../components/Themed';
-import { Tab } from '@rneui/base';
+import { Tab, TabView } from '@rneui/base';
+import { router } from "expo-router";
 
 export default function TabOneScreen() {
   const [index, setIndex] = useState(0);
+  const [row1] = useState((new Array(100).fill(0).map(() => Math.random() * 200 + 100)));
+  const [row2] = useState((new Array(100).fill(0).map(() => Math.random() * 200 + 100)));
+
+  const press = useCallback((event: any) => {
+    router.push("/modal")
+  }, [])
   return (
-    <View style={styles.container}>
+    <>
       <Tab value={index} onChange={setIndex} dense>
-        <Tab.Item>Tab</Tab.Item>
-        <Tab.Item>Tab</Tab.Item>
+        <Tab.Item title="Tab One" onPress={() => setIndex(0)} />
+        <Tab.Item title="Tab Two" onPress={() => setIndex(1)} />
+        <Tab.Item title="Tab Three" onPress={() => setIndex(2)} />
       </Tab>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-    </View>
+
+      <TabView value={index} onChange={setIndex} animationType="spring">
+        <TabView.Item style={{ width: '100%' }}>
+          <ScrollView >
+            <View style={styles.container} onTouchEnd={press} >
+              <View style={styles.flexRow} >
+                {
+                  row1.map((item, index) => {
+                    return (
+                      <View
+                        key={index}
+                        style={{ ...styles.flexRowItem, height: item }} />
+                    )
+                  })
+                }
+              </View>
+              <View style={styles.flexRow} >{
+                row2.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={{ ...styles.flexRowItem, height: item }} />
+                  )
+                })
+              }
+              </View>
+
+            </View>
+          </ScrollView>
+
+        </TabView.Item>
+        <TabView.Item style={{ width: '100%' }}>
+          <Text >Favorite</Text>
+        </TabView.Item>
+        <TabView.Item style={{ width: '100%' }}>
+          <Text>Cart</Text>
+        </TabView.Item>
+      </TabView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  flexRow: {
+    width: "50%",
+    backgroundColor: 'skyblue',
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'center',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
+  flexRowItem: {
+    width: "80%",
+    marginVertical: 5,
+    marginLeft: "auto",
+    marginRight: "auto",
+  }
 });
