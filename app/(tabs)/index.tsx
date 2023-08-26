@@ -1,84 +1,69 @@
-import { StyleSheet, FlatList, ScrollView } from 'react-native';
-import { useCallback, useState } from "react"
-import { Text, View } from '../../components/Themed';
-import { Tab, TabView } from '@rneui/base';
-import { router } from "expo-router";
+import { useCallback, useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { STASH, useStash } from "../../store";
 
 export default function TabOneScreen() {
-  const [index, setIndex] = useState(0);
-  const [row1] = useState((new Array(100).fill(0).map(() => Math.random() * 200 + 100)));
-  const [row2] = useState((new Array(100).fill(0).map(() => Math.random() * 200 + 100)));
 
-  const press = useCallback((event: any) => {
-    router.push("/modal")
-  }, [])
-  return (
-    <>
-      <Tab value={index} onChange={setIndex} dense>
-        <Tab.Item title="Tab One" onPress={() => setIndex(0)} />
-        <Tab.Item title="Tab Two" onPress={() => setIndex(1)} />
-        <Tab.Item title="Tab Three" onPress={() => setIndex(2)} />
-      </Tab>
+    const [stash, setStash] = useStash(STASH);
 
-      <TabView value={index} onChange={setIndex} animationType="spring">
-        <TabView.Item style={{ width: '100%' }}>
-          <ScrollView >
-            <View style={styles.container} onTouchEnd={press} >
-              <View style={styles.flexRow} >
+    useEffect(() => {
+        setStash(["测试书名1", "测试书名2", "测试书名3", "测试书名4", "测试书名5"]);
+    }, [])
+
+    const handlePress = useCallback(() => {
+        
+    }, [])
+
+    return (
+        <ScrollView >
+            <View style={styles.container}>
                 {
-                  row1.map((item, index) => {
-                    return (
-                      <View
-                        key={index}
-                        style={{ ...styles.flexRowItem, height: item }} />
-                    )
-                  })
+                    stash?.map((item: any) => {
+                        return (
+                            <View
+                                style={styles.singleItem}
+                                key={item}
+                                onPointerDown={handlePress}>
+                                <View
+                                    style={styles.imgContainer} />
+                                <Text
+                                    style={styles.textContainer}>
+                                    {item}
+                                </Text>
+                            </View>
+                        )
+                    })
                 }
-              </View>
-              <View style={styles.flexRow} >{
-                row2.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{ ...styles.flexRowItem, height: item }} />
-                  )
-                })
-              }
-              </View>
-
             </View>
-          </ScrollView>
-
-        </TabView.Item>
-        <TabView.Item style={{ width: '100%' }}>
-          <Text >Favorite</Text>
-        </TabView.Item>
-        <TabView.Item style={{ width: '100%' }}>
-          <Text>Cart</Text>
-        </TabView.Item>
-      </TabView>
-    </>
-  );
+        </ScrollView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#fff',
-  },
-  flexRow: {
-    width: "50%",
-    backgroundColor: 'skyblue',
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'center',
-  },
-  flexRowItem: {
-    width: "80%",
-    marginVertical: 5,
-    marginLeft: "auto",
-    marginRight: "auto",
-  }
+    container: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+    },
+    singleItem: {
+        width: "30%",
+        height: 150,
+        backgroundColor: "#ccc",
+        display: "flex",
+        justifyContent: "space-around",
+        marginTop: 10,
+        marginLeft: 10,
+    },
+    imgContainer: {
+        width: "80%",
+        height: "80%",
+        backgroundColor: "#fff",
+        marginLeft: "auto",
+        marginRight: "auto",
+    },
+    textContainer: {
+        marginLeft: "auto",
+        marginRight: "auto",
+    }
 });
+
